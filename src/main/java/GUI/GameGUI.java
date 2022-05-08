@@ -5,96 +5,59 @@ import utils.SwingFactories;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
-public class GameGUI implements MouseListener, MouseMotionListener {
-    private Game game;
-    private JFrame frame;
-    private JLayeredPane layeredPane;
-    private JPanel chessBoard;
+public class GameGUI {
+    Game game;
+    JFrame frame;
+    JPanel panel;
+    JLayeredPane layeredPane;
+    private Tile tile_arr[][];
 
-    private JLabel chessPiece;
-    private int xPos;
-    private int yPos;
 
     public GameGUI(Game game) {
         //https://community.oracle.com/tech/developers/discussion/1369482/chess-game-with-drag-and-drop-using-jlayeredpane
 
         super();
         this.game = game;
-        Dimension boardSize = new Dimension(600, 600);
+        tile_arr = new Tile[8][8];
         SwingFactories swingFactories = new SwingFactories();
         frame = swingFactories.getDefaultJFrame(800, 800, "Chess");
-        layeredPane = new JLayeredPane();
-        frame.getContentPane().add(layeredPane);
-        layeredPane.setPreferredSize(boardSize);
-        layeredPane.addMouseListener(this);
-        layeredPane.addMouseMotionListener(this);
-        chessBoard = new JPanel();
-        layeredPane.add(chessBoard, JLayeredPane.DEFAULT_LAYER);
-        chessBoard.setLayout(new GridLayout(8, 8));
-        chessBoard.setPreferredSize(boardSize);
-        chessBoard.setBounds(0, 0, boardSize.width, boardSize.height);
-        for (int i = 0; i < 64; i++) {
-            JPanel square = new JPanel(new BorderLayout());
-            chessBoard.add(square);
+        panel = new JPanel();
+        panel.setLayout(new GridLayout(8, 8));
+        frame.getContentPane().add(panel);
+        for (int y = 8; y >= 1; y--) {
 
-            int row = (i / 8) % 2;
-            if (row == 0) {
-                if (i % 2 == 0) {
-                    square.setBackground(Color.white);
+            for (int x = 1; x < 9; x++) {
+                Tile tile = new Tile(x, y);
+                if (y % 2 == 0) {
+                    if (x % 2 == 0) {
+                        tile.setBackground(Color.gray);
+                    } else {
+                        tile.setBackground(Color.white);
+                    }
                 } else {
-                    square.setBackground(Color.black);
+                    if (x % 2 == 0) {
+                        tile.setBackground(Color.white);
+                    } else {
+                        tile.setBackground(Color.gray);
+                    }
                 }
-            } else {
-                if (i % 2 == 0) {
-                    square.setBackground(Color.black);
-                } else {
-                    square.setBackground(Color.white);
-                }
+                tile.setBaseColor(tile.getBackground());
+                tile.addActionListener(e -> tileAction(tile, game));
+                panel.add(tile);
+                tile_arr[x - 1][y - 1] = tile;
+
             }
         }
+        tile_arr[1][2].setIcon(swingFactories.getBlackBishopIcon());
+        tile_arr[2][2].setIcon(swingFactories.getBlackKnightIcon());
+        tile_arr[1][2].setText("");
 
-        //JLabel piece = new JLabel(new ImageIcon("GUI/graphics/bb.svg"));
-        //chessBoard.add(piece);
         frame.setVisible(true);
-
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
+    void tileAction(Tile tile, Game game) {
+        tile.setIcon(null);
 
     }
 }
