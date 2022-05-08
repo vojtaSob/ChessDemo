@@ -1,33 +1,40 @@
 package GUI;
 
+import game.Piece;
+
 import javax.swing.*;
 import java.awt.*;
 
-public  class Tile extends JButton {
-    int width;
-    int height;
+public class Tile extends JButton {
+    private int widthInBoard;
+    private int heightInBoard;
     private Color baseColor;
+    Piece piece;
     String chessCords;
 
     public Tile(int width, int height) {
-        this.width = width;
-        this.height = height;
+        this.widthInBoard = width;
+        this.heightInBoard = height;
         this.setChessCords();
-        this.setText(this.chessCords);
+        //this.setText(this.chessCords);
     }
 
     public Color getBaseColor() {
-        return baseColor;
+        return this.baseColor;
     }
 
-    public void setBaseColor(Color base_color) {
+    public void resetColor() {
+        this.setBackground(this.baseColor);
+    }
+
+    public void setBaseColor(Color baseColor) {
         this.baseColor = baseColor;
     }
 
-
     private void setChessCords() {
+        int i = this.widthInBoard + 1;
         char x = ' ';
-        switch (this.width) {
+        switch (i) {
             case 1:
                 x = 'a';
                 break;
@@ -53,10 +60,38 @@ public  class Tile extends JButton {
                 x = 'h';
                 break;
         }
-        this.chessCords = x + Integer.toString(this.height);
+        this.chessCords = x + Integer.toString(this.heightInBoard + 1);
 
 
     }
 
+    public Piece getPiece() {
+        return piece;
+    }
 
+    public void setPiece(Piece piece) {
+        if (piece == null) {
+            this.piece = null;
+            this.setIcon(null);
+        } else {
+            this.piece = piece;
+            this.setIcon(piece.getImageIcon());
+        }
+    }
+
+    public int getWidthInBoard() {
+        return widthInBoard;
+    }
+
+    public void setWidthInBoard(int widthInBoard) {
+        this.widthInBoard = widthInBoard;
+    }
+
+    public int getHeightInBoard() {
+        return heightInBoard;
+    }
+
+    public void setHeightInBoard(int heightInBoard) {
+        this.heightInBoard = heightInBoard;
+    }
 }

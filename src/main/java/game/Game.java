@@ -7,7 +7,7 @@ public class Game {
     private String whitePlayer;
     private String blackPlayer;
     private ClockSettings clockSettings;
-    private Tile gameBoard[][];
+    public Piece gameBoard[][];
     private int gamePhase;
 
     //Game phase 0 White choosing piece to move.
@@ -15,9 +15,10 @@ public class Game {
     //Game phase 2 Black choosing piece to move.
     //Game phase 3 Black choosing move target.
     public Game(String whitePlayer, String blackPlayer) {
+        this.gameBoard = new Piece[8][8];
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
-        this.gamePhase++;
+        this.gamePhase = 0;
     }
 
     public String getWhitePlayer() {
@@ -41,10 +42,29 @@ public class Game {
         return gamePhase;
     }
 
+    public void setGamePhase(int gamePhase) {
+        this.gamePhase = gamePhase;
+    }
+
     public void goToNextPhase() {
         if (this.gamePhase < 3) {
             this.gamePhase++;
+        } else {
+            this.gamePhase = 0;
         }
-        this.gamePhase = 0;
+    }
+
+    public void printBoardState() {
+        for (int x = 7; x >= 0; x--) {
+            for (int y = 0; y < 8; y++) {
+                if (gameBoard[x][y] != null) {
+                    System.out.print(gameBoard[x][y].getType() + " " + gameBoard[x][y].getColor());
+                } else {
+                    System.out.print("-------------");
+                }
+            }
+            System.out.println();
+
+        }
     }
 }
