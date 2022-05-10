@@ -23,8 +23,8 @@ public class King extends Piece {
         } else {
             this.setImageIcon(swingFactories.getBlackKingIcon());
         }
-        this.addMoves(new Move(Move.CASTLING, -4, 0));
-        this.addMoves(new Move(Move.CASTLING, 3, 0));
+        this.addMoves(new Move(Move.CASTLING, -3, 0));
+        this.addMoves(new Move(Move.CASTLING, 2, 0));
         this.addMoves(new Move(Move.MOVE_OR_TAKE, 1, 0));
         this.addMoves(new Move(Move.MOVE_OR_TAKE, -1, 0));
         this.addMoves(new Move(Move.MOVE_OR_TAKE, 1, 1));

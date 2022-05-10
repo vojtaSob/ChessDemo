@@ -210,7 +210,7 @@ public class GameGUI {
                 }
             } else if (m.moveType == Move.CASTLING) {
                 if (checkCastlingConditions(tile.getPiece().getColor(), m.xAddition)) {
-                    System.out.println("Move possible");
+                    possibleMoves.add(possibleTarget);
                 }
                 continue;
             } else if (m.moveType == Move.EN_PASSANT) {
@@ -242,12 +242,12 @@ public class GameGUI {
         } else {
             return false;
         }
-        if (kingToMove.getType() != Piece.KING || !kingToMove.didFirstMove) {
+        if (kingToMove.getType() != Piece.KING || kingToMove.didFirstMove) {
             return false;
-        } else if (rookToMove.getType() != Piece.ROOK || !rookToMove.didFirstMove) {
+        } else if (rookToMove.getType() != Piece.ROOK || rookToMove.didFirstMove) {
             return false;
         }
-        if (x_change == -4) {
+        if (x_change == -3) {
             for (int i = 1; i < 3; i++) {
                 if (tile_arr[i][yConst].getPiece() != null) {
                     return false;
