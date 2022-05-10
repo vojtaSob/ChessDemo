@@ -29,12 +29,21 @@ public class GameGUI {
         initializeBoard();
         SwingFactories swingFactories = new SwingFactories();
         GameUtils gameUtils = new GameUtils(game);
-        createBaseGameSetup();
+        //createBaseGameSetup();
+        testGameSetup();
         frame.setVisible(true);
         possibleMoves = new ArrayList<>();
     }
 
+    void testGameSetup() {
+        GameUtils gameUtils = new GameUtils(game);
+        tile_arr[4][0].setPiece(gameUtils.createNewKing(tile_arr[4][0], Piece.WHITE));
+        tile_arr[0][0].setPiece(gameUtils.createNewRook(tile_arr[0][0], Piece.WHITE));
+        tile_arr[7][0].setPiece(gameUtils.createNewRook(tile_arr[7][0], Piece.WHITE));
+    }
+
     void createBaseGameSetup() {
+
         GameUtils gameUtils = new GameUtils(game);
         //Create White
         for (int i = 0; i < 8; i++) {
@@ -59,8 +68,8 @@ public class GameGUI {
         tile_arr[6][7].setPiece(gameUtils.createNewKnight(tile_arr[6][7], Piece.BLACK));
         tile_arr[2][7].setPiece(gameUtils.createNewBishop(tile_arr[2][7], Piece.BLACK));
         tile_arr[5][7].setPiece(gameUtils.createNewBishop(tile_arr[5][7], Piece.BLACK));
-        tile_arr[3][7].setPiece(gameUtils.createNewKing(tile_arr[3][7], Piece.BLACK));
-        tile_arr[4][7].setPiece(gameUtils.createNewQueen(tile_arr[4][7], Piece.BLACK));
+        tile_arr[3][7].setPiece(gameUtils.createNewQueen(tile_arr[3][7], Piece.BLACK));
+        tile_arr[4][7].setPiece(gameUtils.createNewKing(tile_arr[4][7], Piece.BLACK));
 
     }
 
@@ -68,6 +77,7 @@ public class GameGUI {
         tile_arr = new Tile[8][8];
         SwingFactories swingFactories = new SwingFactories();
         frame = swingFactories.getDefaultJFrame(800, 800, "Chess");
+        frame.setResizable(true);
         panel = new JPanel();
         panel.setLayout(new GridLayout(8, 8));
         frame.getContentPane().add(panel);
@@ -89,6 +99,7 @@ public class GameGUI {
                     }
                 }
                 tile.setBaseColor(tile.getBackground());
+                tile.setPiece(null);
                 tile.addActionListener(e -> tileAction(tile));
                 panel.add(tile);
                 tile_arr[x][y] = tile;
@@ -176,6 +187,7 @@ public class GameGUI {
 
 
                 }
+                continue;
             } else if (m.moveType == Move.AS_FIRST_MOVE && this.moveStartingPosition.piece.didFirstMove) {
                 continue;
             } else if (m.moveType == Move.TAKE) {
@@ -196,7 +208,12 @@ public class GameGUI {
                         continue;
                     }
                 }
-
+            } else if (m.moveType == Move.CASTLING) {
+                if (checkCastlingConditions(tile.getPiece().getColor(), m.xAddition)) {
+                    System.out.println("Move possible");
+                }
+                continue;
+            } else if (m.moveType == Move.EN_PASSANT) {
 
             }
             possibleMoves.add(possibleTarget);
@@ -208,6 +225,47 @@ public class GameGUI {
         game.goToNextPhase();
     }
 
+    public boolean checkCastlingConditions(String color, int x_change) {
+        int yConst = 0;
+        if (color == Piece.BLACK) {
+            yConst = 7;
+        }
+        if (tile_arr[4][yConst].getPiece().getType() == null) {
+            return false;
+        }
+        Piece kingToMove = tile_arr[4][yConst].getPiece();
+        Piece rookToMove = null;
+        if (x_change == -4 && tile_arr[0][yConst].getPiece() != null) {
+            rookToMove = tile_arr[0][yConst].getPiece();
+        } else if (tile_arr[7][yConst].getPiece() != null) {
+            rookToMove = tile_arr[7][yConst].getPiece();
+        } else {
+            return false;
+        }
+        if (kingToMove.getType() != Piece.KING || !kingToMove.didFirstMove) {
+            return false;
+        } else if (rookToMove.getType() != Piece.ROOK || !rookToMove.didFirstMove) {
+            return false;
+        }
+        if (x_change == -4) {
+            for (int i = 1; i < 3; i++) {
+                if (tile_arr[i][yConst].getPiece() != null) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = 5; i < 6; i++) {
+                if (tile_arr[i][yConst].getPiece() != null) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void doCastling() {
+    }
 
     public void doAMove(Tile tile) {
         tile.setPiece(this.moveStartingPosition.getPiece());

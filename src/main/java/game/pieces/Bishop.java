@@ -22,7 +22,7 @@ public class Bishop extends Piece {
         this.addMoves(new Move(Move.MOVE_OR_TAKE_UNLIMITED, 1, 1));
         this.addMoves(new Move(Move.MOVE_OR_TAKE_UNLIMITED, -1, 1));
         this.addMoves(new Move(Move.MOVE_OR_TAKE_UNLIMITED, 1, -1));
-        this.addMoves(new Move(Move.MOVE_OR_TAKE_UNLIMITED, 1, -1));
+        this.addMoves(new Move(Move.MOVE_OR_TAKE_UNLIMITED, -1, -1));
 
 
     }
